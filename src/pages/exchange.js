@@ -12,7 +12,7 @@ import TradingChartDark from '../components/TradingChartDark';
 import { ThemeConsumer } from '../context/ThemeContext';
 import {  useWindowSize } from '@react-hook/window-size';
 import {fetchOrCreateUser, doc, onSnapshot, query, collection, db, where, fetchSupportedTokens} from '../firebase';
-import { sendOrder } from '../api'
+import { sendOrder, removeOrder } from '../api'
 import Pairs from '../pairs'
 import { getTokensBalances } from '../helpers/contract';
 
@@ -35,6 +35,7 @@ const Exchange = () => {
   const [buyOrders, setBuyOrders] = useState([]);
   const [tokens, setTokens] = useState([]);
   const [sellOrders, setSellOrders] = useState([]);
+  const [userTrades, setUserTrades] = useState([]);
   const [width, height] = useWindowSize()
   const breakPoint = 767;
 
@@ -65,6 +66,19 @@ const Exchange = () => {
       console.log("Current Buy Orders: ", orders);
       let sortedOrders = orders.sort((a, b) => b.price - a.price);
       setSellOrders(sortedOrders);
+    });
+  }
+
+  const userTradesSocket = () => {
+    const q = query(collection(db, `${pair}-TRADES`), where("account", "==", account));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const orders = [];
+      querySnapshot.forEach((doc) => {
+          orders.push(doc.data());
+      });
+      console.log("Trade History: ", orders);
+      let sortedOrders = orders.sort((a, b) => b.date - a.date);
+      setUserTrades(sortedOrders);
     });
   }
 
@@ -135,6 +149,7 @@ const Exchange = () => {
   useEffect(() => {
     if(account){
       fetchUserData();
+      userTradesSocket();
     }
   }, [account])
 
@@ -160,6 +175,15 @@ const Exchange = () => {
     let hash = await signer.signMessage(JSON.stringify(orderData));
 
     sendOrder({orderData, hash})
+
+  }
+
+  const deleteOrder = async (orderData) => {
+    const signer = library.getSigner();
+
+    let hash = await signer.signMessage(JSON.stringify(orderData));
+
+    removeOrder({orderData, hash})
 
   }
 
@@ -228,7 +252,7 @@ const Exchange = () => {
             }
             <ThemeConsumer>
               {({data}) => {
-              return <HistoryOrder orders={[...buyOrders, ...sellOrders]} user={user} theme={data.theme} />
+              return <HistoryOrder orders={[...buyOrders, ...sellOrders]} user={user} theme={data.theme} deleteOrder={deleteOrder} userTrades={userTrades}/>
               }}
             </ThemeConsumer>
           </div>

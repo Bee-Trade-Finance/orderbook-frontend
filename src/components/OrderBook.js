@@ -30,6 +30,7 @@ export default function OrderBook({buyOrders, sellOrders, pair, autoFillOrder}) 
             {buyOrders.map(order => {
               return (
                 <tr className="green-bg" onClick={(e) => autoFillOrder(order.price, order.volume, order.buySell)}>
+                  <div className='buy-fill' style={{width: `${order.filledAmount/order.amountA * 100}%`}}></div>
                   <td className="green">{order.price}</td>
                   <td>{abbreviateNumber(order.amountA, 1) }</td>
                 </tr>

@@ -167,6 +167,14 @@ tbody.ob-heading {
   background-color: #de262663;
 }
 
+.buy-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #4eaa2363;
+}
+
 @media only screen and (max-width: 767px){
   .order-book .table thead th {
     font-size: 9px;
