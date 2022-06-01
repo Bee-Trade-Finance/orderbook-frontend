@@ -7,7 +7,8 @@ export async function getTokenBalance(library, token){
     const signer = library.getSigner();
     const beetradeOrderbookContract = new ethers.Contract(process.env.REACT_APP_CONTRACT_ADDRESS_TESTNET, BeeTradeOrderbookABI, signer);
     let res = await beetradeOrderbookContract.getAvailableTokenBalance(token);
-    return ethers.utils.formatEther(res);
+    let res2 = await beetradeOrderbookContract.getLockedTokenBalance(token);
+    return {available: ethers.utils.formatEther(res), locked: ethers.utils.formatEther(res2)};
 }
 
 export async function getTokensBalances(library, tokens){

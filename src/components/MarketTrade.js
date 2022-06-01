@@ -12,9 +12,9 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
 
   useEffect(() => {
     if(buySell === 'sell'){
-      setVolume(((sliderState.x/100) * user[activePair[0]]))
+      setVolume(((sliderState.x/100) * user[activePair[0]]?.available))
     } else {
-      setVolume(((sliderState.x/100) * user[activePair[1]]))
+      setVolume(((sliderState.x/100) * user[activePair[1]]?.available))
     }
   }, [sliderState])
 
@@ -24,16 +24,16 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
 
   const createBuyOrder = (e) => {
     e.preventDefault();
-    if(orderType === 'limit' && (price <= 0 || volume <= 0 || volume > user[activePair[1]])) return;
-    if(orderType === 'market' && (volume<= 0 || volume > user[activePair[1]])) return;
+    if(orderType === 'limit' && (price <= 0 || volume <= 0 || volume > user[activePair[1]]?.available)) return;
+    if(orderType === 'market' && (volume<= 0 || volume > user[activePair[1]]?.available)) return;
     
     createOrder(orderType)
   }
 
   const createSellOrder = (e) => {
     e.preventDefault();
-    if(orderType === 'limit' && (price <= 0 || volume <= 0 || volume > user[activePair[0]])) return;
-    if(orderType === 'market' && (volume<= 0 || volume > user[activePair[0]])) return;
+    if(orderType === 'limit' && (price <= 0 || volume <= 0 || volume > user[activePair[0]]?.available)) return;
+    if(orderType === 'market' && (volume<= 0 || volume > user[activePair[0]]?.available)) return;
     createOrder(orderType)
   }
 
@@ -61,7 +61,7 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                           placeholder="Price"
                           required
                           value={price}
-                          onChange={(e) => setPrice(e.target.value)}
+                          onChange={(e) => setPrice(parseInt(e.target.value))}
                         />
                         <div className="input-group-append">
                           <span className="input-group-text price">{activePair[1]}</span>
@@ -77,7 +77,7 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                           required
                           value={amount}
                           disabled
-                          onChange={(e) => setAmount(e.target.value)}
+                          onChange={(e) => setAmount(parseInt(e.target.value))}
                         />
                         <div className="input-group-append">
                           <span className="input-group-text amount">{activePair[0]}</span>
@@ -93,7 +93,7 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                       placeholder="Amount"
                       required
                       value={volume}
-                      onChange={(e) => setVolume(e.target.value)}
+                      onChange={(e) => setVolume(parseInt(e.target.value))}
                     />
                     <div className="input-group-append">
                       <span className="input-group-text amount">{activePair[1]}</span>
@@ -102,9 +102,12 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                   <div>
                     <Slider axis="x" x={sliderState.x} onChange={setSliderState} styles={{track: {backgroundColor: '#fff', width: '100%'}, active: {backgroundColor: 'orange'}}} />
                   </div>
-                  {volume > user[activePair[1]] && <p className='text-danger'>Insufficient Amount</p>}
+                  {volume > user[activePair[1]]?.available && <p className='text-danger'>Insufficient Amount</p>}
                   <p>
-                    Available: <span>{user.address && user[activePair[1]]? user[activePair[1]] :  '----'} {activePair[1]}</span>
+                    Available: <span>{user.address && user[activePair[1]]?.available? user[activePair[1]]?.available :  '----'} {activePair[1]}</span>
+                  </p>
+                  <p>
+                    Locked: <span>{user.address && user[activePair[1]]?.locked? user[activePair[1]]?.locked :  '----'} {activePair[1]}</span>
                   </p>
                   <button type="submit" onClick={(e) => createBuyOrder(e)} className="btn btn-sm buy" disabled={(!active || createOrderLoading)}>
                     {active? (createOrderLoading? 'Loading...' : 'Buy') : 'Please Connect Wallet'}
@@ -133,7 +136,7 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                           placeholder="Price"
                           required
                           value={price}
-                          onChange={(e) => setPrice(e.target.value)}
+                          onChange={(e) => setPrice(parseInt(e.target.value))}
                         />
                         <div className="input-group-append">
                           <span className="input-group-text price">{activePair[1]}</span>
@@ -149,7 +152,7 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                           required
                           value={amount}
                           disabled
-                          onChange={(e) => setAmount(e.target.value)}
+                          onChange={(e) => setAmount(parseInt(e.target.value))}
                         />
                         <div className="input-group-append">
                           <span className="input-group-text amount">{activePair[1]}</span>
@@ -165,7 +168,7 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                       placeholder="Amount"
                       required
                       value={volume}
-                      onChange={(e) => setVolume(e.target.value)}
+                      onChange={(e) => setVolume(parseInt(e.target.value))}
                     />
                     <div className="input-group-append">
                       <span className="input-group-text amount">{activePair[0]}</span>
@@ -175,11 +178,13 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                     <Slider axis="x" x={sliderState.x} onChange={setSliderState} styles={{track: {backgroundColor: '#fff', width: '100%'}, active: {backgroundColor: 'orange'}}} />
                   </div>
                   
-                  {volume > user[activePair[0]] && <p className='text-danger'>Insufficient Amount</p>}
+                  {volume > user[activePair[0]]?.available && <p className='text-danger'>Insufficient Amount</p>}
                   <p>
-                    Available: <span>{user.address && user[activePair[1]]? user[activePair[0]] :  '----'} {activePair[0]}</span>
+                    Available: <span>{user.address && user[activePair[1]]?.available? user[activePair[0]]?.available :  '----'} {activePair[0]}</span>
                   </p>
-                  
+                  <p>
+                    Locked: <span>{user.address && user[activePair[0]]?.locked? user[activePair[0]]?.locked :  '----'} {activePair[0]}</span>
+                  </p>
                   <button type="submit"  onClick={(e) => createSellOrder(e)} className="btn sell" disabled={(!active || createOrderLoading)}>
                     {active? (createOrderLoading? 'Loading...' : 'Sell') : 'Please Connect Wallet'}
                   </button>

@@ -138,6 +138,7 @@ const Exchange = () => {
 
   async function getBalance(){
     let res = await getTokensBalances(library, tokens);
+    console.log("ressszzzzz", res)
     let _userData = {address: account};
     pair.split('-').forEach((_pair) => {
       let dat = tokens.find(item => item.symbol === _pair);

@@ -110,9 +110,9 @@ export default function Wallet() {
                             </div>
                           </div>
                           <div>
-                            <h3>{balances[token.address]? balances[token.address] : '---'}</h3>
+                            <h3>{balances[token.address]?.available? balances[token.address]?.available : '---'}</h3>
                             <p className="text-right">
-                              Available
+                              Locked: <strong>{balances[token.address]?.locked? balances[token.address]?.locked : '---'}</strong>
                             </p>
                           </div>
                         </div>
