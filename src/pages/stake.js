@@ -6,7 +6,7 @@ import StakingList from '../components/StakingList';
 export default function stake() {
   return (
     <>
-      <div className="container-fluid p-0 m-0">
+      <div className="container-fluid p-0 m-0 mb-5">
         <div className="row col-12 d-flex justify-content-center p-0 m-0">
           {/* <div className="col-md-12">
             <MarketCarousel />

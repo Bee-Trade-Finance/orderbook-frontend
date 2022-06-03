@@ -12,9 +12,9 @@ import TradingChartDark from '../components/TradingChartDark';
 import { ThemeConsumer } from '../context/ThemeContext';
 import {  useWindowSize } from '@react-hook/window-size';
 import {fetchOrCreateUser, doc, onSnapshot, query, collection, db, where, fetchSupportedTokens} from '../firebase';
-import { sendOrder, removeOrder } from '../api'
+import { removeOrder } from '../api'
 import Pairs from '../pairs'
-import { getTokensBalances } from '../helpers/contract';
+import { getTokensBalances, sendOrder } from '../helpers/contract';
 
 
 const Exchange = () => {
@@ -156,27 +156,34 @@ const Exchange = () => {
 
   const createOrder = async (orderType) => {
     // setCreateOrderLoading(true)
+    // let orderData = {
+    //   id: Math.random().toString(16).slice(2),
+    //   pair,
+    //   amountA: buySell === 'buy'? volume/price : volume,
+    //   amountB: buySell === 'buy'? volume : volume * price,
+    //   price, 
+    //   volume, 
+    //   buySell, 
+    //   orderType, 
+    //   account,
+    //   filledAmount: 0,
+    //   date: Date.now(),
+    //   fills: []
+    // }
+
     let orderData = {
       id: Math.random().toString(16).slice(2),
       pair,
-      amountA: buySell === 'buy'? volume/price : volume,
-      amountB: buySell === 'buy'? volume : volume * price,
+      token: buySell === 'buy'? tokens.find(item => item.symbol === activePair[1]).address : tokens.find(item => item.symbol === activePair[0]).address,
       price, 
       volume, 
       buySell, 
       orderType, 
-      account,
-      filledAmount: 0,
       date: Date.now(),
-      fills: []
     }
 
-    const signer = library.getSigner();
-
-    let hash = await signer.signMessage(JSON.stringify(orderData));
-
-    sendOrder({orderData, hash})
-
+    let res = await sendOrder(library, orderData);
+    console.log("res", res)
   }
 
   const deleteOrder = async (orderData) => {

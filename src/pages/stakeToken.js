@@ -88,9 +88,9 @@ export default function StakeToken() {
         <ThemeConsumer>
               {({data}) => {
                   return (
-                    <div className="container-fluid p-0 m-0">
+                    <div className="container-fluid p-0 m-0 mb-5">
                         <ToastContainer theme={data.theme} style={{ padding: '10px' }}  />
-                        <div className="row col-12 d-flex justify-content-center p-0 m-0">
+                        <div className="row col-12 d-flex justify-content-center p-0 m-0 mb-5">
                       
                             <div className='col-lg-8 col-md-10 col-sm-11 mt-5 p-2'>
                                 <p className='h2 text-warning'>{token} Staking</p>
