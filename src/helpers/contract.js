@@ -105,7 +105,24 @@ export async function sendOrder(library, order ){
         const beetradeOrderbookContract = new ethers.Contract(process.env.REACT_APP_CONTRACT_ADDRESS_TESTNET, BeeTradeOrderbookABI, signer);
         let amountWei = ethers.utils.parseEther(order.volume.toString());
         let priceWei = ethers.utils.parseEther(order.price.toString());
-        let res = await beetradeOrderbookContract.createOrder(amountWei.toString(), order.buySell, order.date, order.orderType, order.pair, priceWei.toString(), order.id, order.token);
+        let res = await beetradeOrderbookContract.createOrder(amountWei.toString(), order.buySell, order.date.toString(), order.orderType, order.pair, priceWei.toString(), order.id, order.token);
+        const receipt = await res.wait(res);
+        console.log('rezzz', receipt);
+        return ({success: true, data: {message: `Transaction Mined With ${receipt.confirmations} Confirmations, Transaction Hash: ${receipt.transactionHash}`, ...receipt}});
+    } catch(error){
+        if(error.data?.message) return ({error: true, data: error.data})
+        if(error.message) return ({error: true, data: error})
+        return error;
+    }
+}
+
+export async function removeOrder(library, order ){
+    try {
+        const signer = library.getSigner();
+        const beetradeOrderbookContract = new ethers.Contract(process.env.REACT_APP_CONTRACT_ADDRESS_TESTNET, BeeTradeOrderbookABI, signer);
+        let amountWei = ethers.utils.parseEther(order.buySell === 'buy'? order.amountB.toString() : order.amountA.toString());
+        alert(order.token)
+        let res = await beetradeOrderbookContract.cancelOrder(order.pair, order.buySell, order.id, amountWei.toString(), order.token);
         const receipt = await res.wait(res);
         console.log('rezzz', receipt);
         return ({success: true, data: {message: `Transaction Mined With ${receipt.confirmations} Confirmations, Transaction Hash: ${receipt.transactionHash}`, ...receipt}});

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
+import { ToastContainer, toast } from 'react-toastify';
 import HistoryOrder from '../components/HistoryOrder';
 import MarketHistory from '../components/MarketHistory';
 import MarketNews from '../components/MarketNews';
@@ -12,9 +13,10 @@ import TradingChartDark from '../components/TradingChartDark';
 import { ThemeConsumer } from '../context/ThemeContext';
 import {  useWindowSize } from '@react-hook/window-size';
 import {fetchOrCreateUser, doc, onSnapshot, query, collection, db, where, fetchSupportedTokens} from '../firebase';
-import { removeOrder } from '../api'
 import Pairs from '../pairs'
-import { getTokensBalances, sendOrder } from '../helpers/contract';
+import { getTokensBalances, sendOrder, removeOrder } from '../helpers/contract';
+import displayToast from '../utils/displayToast';
+
 
 
 const Exchange = () => {
@@ -138,7 +140,6 @@ const Exchange = () => {
 
   async function getBalance(){
     let res = await getTokensBalances(library, tokens);
-    console.log("ressszzzzz", res)
     let _userData = {address: account};
     pair.split('-').forEach((_pair) => {
       let dat = tokens.find(item => item.symbol === _pair);
@@ -155,21 +156,7 @@ const Exchange = () => {
   }, [account])
 
   const createOrder = async (orderType) => {
-    // setCreateOrderLoading(true)
-    // let orderData = {
-    //   id: Math.random().toString(16).slice(2),
-    //   pair,
-    //   amountA: buySell === 'buy'? volume/price : volume,
-    //   amountB: buySell === 'buy'? volume : volume * price,
-    //   price, 
-    //   volume, 
-    //   buySell, 
-    //   orderType, 
-    //   account,
-    //   filledAmount: 0,
-    //   date: Date.now(),
-    //   fills: []
-    // }
+    setCreateOrderLoading(true)
 
     let orderData = {
       id: Math.random().toString(16).slice(2),
@@ -183,15 +170,16 @@ const Exchange = () => {
     }
 
     let res = await sendOrder(library, orderData);
-    console.log("res", res)
+    setCreateOrderLoading(false)
+    displayToast(toast, res);
+    getBalance();
   }
 
   const deleteOrder = async (orderData) => {
-    const signer = library.getSigner();
-
-    let hash = await signer.signMessage(JSON.stringify(orderData));
-
-    removeOrder({orderData, hash})
+    let token = orderData.buySell === 'buy'? tokens.find(item => item.symbol === orderData.pair.split('-')[1]).address : tokens.find(item => item.symbol === orderData.pair.split('-')[0]).address;
+    orderData.token = token;
+    let res = await removeOrder(library, orderData);
+    displayToast(toast, res);
 
   }
 
@@ -209,6 +197,9 @@ const Exchange = () => {
   return (
     <>
       <div className="container-fluid mtb15 no-fluid">
+        <ThemeConsumer>
+          {({data}) => <ToastContainer theme={data.theme} style={{ padding: '10px' }}  /> }
+        </ThemeConsumer>
         <div className="row sm-gutters">
           {width > breakPoint &&
             <div className="col-sm-12 col-md-3">
@@ -260,7 +251,7 @@ const Exchange = () => {
             }
             <ThemeConsumer>
               {({data}) => {
-              return <HistoryOrder orders={[...buyOrders, ...sellOrders]} user={user} theme={data.theme} deleteOrder={deleteOrder} userTrades={userTrades}/>
+              return <HistoryOrder orders={[...buyOrders, ...sellOrders]} user={user} theme={data.theme} deleteOrder={deleteOrder} userTrades={userTrades} />
               }}
             </ThemeConsumer>
           </div>
