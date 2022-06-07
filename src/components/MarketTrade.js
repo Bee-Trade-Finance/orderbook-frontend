@@ -61,7 +61,7 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                           placeholder="Price"
                           required
                           value={price}
-                          onChange={(e) => setPrice(parseInt(e.target.value))}
+                          onChange={(e) => setPrice(parseFloat(e.target.value))}
                         />
                         <div className="input-group-append">
                           <span className="input-group-text price">{activePair[1]}</span>
@@ -77,7 +77,7 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                           required
                           value={amount}
                           disabled
-                          onChange={(e) => setAmount(parseInt(e.target.value))}
+                          onChange={(e) => setAmount(parseFloat(e.target.value))}
                         />
                         <div className="input-group-append">
                           <span className="input-group-text amount">{activePair[0]}</span>
@@ -93,7 +93,7 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                       placeholder="Amount"
                       required
                       value={volume}
-                      onChange={(e) => setVolume(parseInt(e.target.value))}
+                      onChange={(e) => setVolume(parseFloat(e.target.value))}
                     />
                     <div className="input-group-append">
                       <span className="input-group-text amount">{activePair[1]}</span>
@@ -109,8 +109,8 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                   <p>
                     Locked: <span>{user.address && user[activePair[1]]?.locked? user[activePair[1]]?.locked :  '----'} {activePair[1]}</span>
                   </p>
-                  <button type="submit" onClick={(e) => createBuyOrder(e)} className="btn btn-sm buy" disabled={(!active || createOrderLoading)}>
-                    {active? (createOrderLoading? 'Loading...' : 'Buy') : 'Please Connect Wallet'}
+                  <button type="submit" onClick={(e) => createBuyOrder(e)} className="btn btn-sm buy" disabled={(!active || createOrderLoading || (volume > user[activePair[1]]?.available))}>
+                    {active? (createOrderLoading? 'Loading...' : (volume > user[activePair[1]]?.available? 'Insufficient Amount' : 'Buy')) : 'Please Connect Wallet'}
                   </button>
                 </form>
               </div>
@@ -136,7 +136,7 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                           placeholder="Price"
                           required
                           value={price}
-                          onChange={(e) => setPrice(parseInt(e.target.value))}
+                          onChange={(e) => setPrice(parseFloat(e.target.value))}
                         />
                         <div className="input-group-append">
                           <span className="input-group-text price">{activePair[1]}</span>
@@ -152,7 +152,7 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                           required
                           value={amount}
                           disabled
-                          onChange={(e) => setAmount(parseInt(e.target.value))}
+                          onChange={(e) => setAmount(parseFloat(e.target.value))}
                         />
                         <div className="input-group-append">
                           <span className="input-group-text amount">{activePair[1]}</span>
@@ -168,7 +168,7 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                       placeholder="Amount"
                       required
                       value={volume}
-                      onChange={(e) => setVolume(parseInt(e.target.value))}
+                      onChange={(e) => setVolume(parseFloat(e.target.value))}
                     />
                     <div className="input-group-append">
                       <span className="input-group-text amount">{activePair[0]}</span>
@@ -185,11 +185,16 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                   <p>
                     Locked: <span>{user.address && user[activePair[0]]?.locked? user[activePair[0]]?.locked :  '----'} {activePair[0]}</span>
                   </p>
-                  <button type="submit"  onClick={(e) => createSellOrder(e)} className="btn sell" disabled={(!active || createOrderLoading)}>
-                    {active? (createOrderLoading? 'Loading...' : 'Sell') : 'Please Connect Wallet'}
+                  <button type="submit"  onClick={(e) => createSellOrder(e)} className="btn sell" disabled={(!active || createOrderLoading || (volume > user[activePair[0]]?.available))}>
+                    {active? (createOrderLoading? 'Loading...' :(volume > user[activePair[0]]?.available? 'Insufficient Amount' : 'Sell')) : 'Please Connect Wallet'}
                   </button>
                 </form>
               </div>
+            </div>
+          </Tab>
+          <Tab eventKey="swap" title="Swap">
+            <div className="d-flex justify-content-between">
+              <div className="market-trade-sell"></div>
             </div>
           </Tab>
         </Tabs>

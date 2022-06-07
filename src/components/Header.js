@@ -19,7 +19,10 @@ const Header = () => {
   })
 
   useEffect(()=> {
-    activate(connectors.injected);
+    let status = window.localStorage.getItem('disconnected');
+    if(status === 'false'){
+      activate(connectors.injected);
+    }
     let el = document.querySelector('#darkTheme');
     if (el) {
       el.addEventListener('click', function () {
@@ -29,7 +32,10 @@ const Header = () => {
   }, [])
 
   useEffect(()=> {
-    activate(connectors.injected);
+    let status = window.localStorage.getItem('disconnected');
+    if(status === 'false'){
+      activate(connectors.injected);
+    }
   }, [account])
 
   const setProvider = (type) => {
@@ -38,7 +44,13 @@ const Header = () => {
 
   const connectWallet = () => {
     activate(connectors.injected);
+    window.localStorage.setItem("disconnected", 'false');
     setProvider("injected");
+  }
+
+  const disconnectWallet = () => {
+    window.localStorage.setItem("disconnected", 'true');
+    deactivate();
   }
 
   return (
@@ -137,7 +149,7 @@ const Header = () => {
                           <span>Settings</span>
                         </Link>
                       </li>
-                      <li className="nav-item" onClick={deactivate}>
+                      <li className="nav-item" onClick={disconnectWallet}>
                         <Link to="#" className="nav-link red">
                           <i className="icon ion-md-power"></i>
                           <span>Disconnect Wallet</span>

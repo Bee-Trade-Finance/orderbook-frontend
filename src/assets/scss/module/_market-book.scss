@@ -152,7 +152,7 @@
 .order-book tbody {
   display: block;
   overflow-y: auto;
-  height: 211px;
+  height: 150px;
 }
 
 tbody.ob-heading {
@@ -175,7 +175,7 @@ tbody.ob-heading {
   background-color: #4eaa2363;
 }
 
-@media only screen and (max-width: 767px){
+
   .order-book .table thead th {
     font-size: 9px;
     padding: 0px!important;
@@ -185,5 +185,5 @@ tbody.ob-heading {
     padding: 0 5px!important;
     font-size: 12px!important;
   }
-}
+
 

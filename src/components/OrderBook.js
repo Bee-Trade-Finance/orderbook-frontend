@@ -24,6 +24,23 @@ export default function OrderBook({buyOrders, sellOrders, pair, autoFillOrder}) 
               )
             })}
           </tbody>
+
+          <tbody className="ob-heading">
+            <tr>
+              <td>
+                <span><strong>Price</strong> </span>
+                0.020367
+              </td>
+              <td>
+                <span><strong>USD</strong></span>
+                00.00
+              </td>
+              <td className="green">
+                <span><strong>Change (24H)</strong></span>
+                +100.51%
+              </td>
+            </tr>
+          </tbody>
           
           
           <tbody>
