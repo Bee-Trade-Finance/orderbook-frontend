@@ -26,10 +26,10 @@ export default function HistoryOrder({orders, user, theme, deleteOrder, userTrad
               return <Card className='m-3' style={{backgroundColor: theme === 'light'? '#f5f9fc' : '#1c2030'}} text={theme.toLowerCase() === 'light' ? 'dark' : 'white'}>
                         <Card.Header as="h5">
                           {order.pair} <Badge style={{backgroundColor: order.buySell == 'buy'? 'green' : 'red'}}>{order.buySell}</Badge>
-                          <p style={{fontSize: 11, fontWeight: 'bold', margin: '3px 0px'}}>{order.buySell == 'buy' && `${order.buySell.toUpperCase()} ${abbreviateNumber(order.amountA, 1)} ${order.pair.split('-')[0]} at ${order.price} ${order.pair.split('-')[1]}`}</p>
+                          <p style={{fontSize: 11, fontWeight: 'bold', margin: '3px 0px'}}><span>{order.orderType.toUpperCase()}</span> {order.buySell == 'buy' && `${order.buySell.toUpperCase()} ${abbreviateNumber(order.amountA, 1)} ${order.pair.split('-')[0]} at ${order.price} ${order.pair.split('-')[1]}`}</p>
                           <p style={{fontSize: 11, fontWeight: 'bold', margin: '3px 0px'}}>{order.buySell == 'sell' && `${order.buySell.toUpperCase()} ${abbreviateNumber(order.amountA, 2)} ${order.pair.split('-')[0]} at ${order.price} ${order.pair.split('-')[1]}`}</p>
-                          {order.buySell === 'buy' && <ProgressBar now={(order.filledAmount / order.amountA) * 100} label={`${abbreviateNumber(order.filledAmount / order.price, 1)} / ${abbreviateNumber(order.amountA, 1)}`} />}
-                          {order.buySell === 'sell' && <ProgressBar now={(order.filledAmount / order.amountA) * 100} label={`${abbreviateNumber(order.filledAmount, 1)} / ${abbreviateNumber(order.amountA, 1)}`} />}
+                          {order.buySell === 'buy' && <ProgressBar now={(order.filledAmount / order.amountA) * 100} label={`${(order.filledAmount / order.price)} / ${(order.amountA)}`} />}
+                          {order.buySell === 'sell' && <ProgressBar now={(order.filledAmount / order.amountA) * 100} label={`${(order.filledAmount)} / ${(order.amountA)}`} />}
                           <Button onClick={() => deleteOrder(order)} className='btn-sm mt-3' variant="danger">Cancel Order</Button>
                         </Card.Header>
                       </Card>
@@ -41,8 +41,8 @@ export default function HistoryOrder({orders, user, theme, deleteOrder, userTrad
                 return <Card className='m-3' style={{backgroundColor: theme === 'light'? '#f5f9fc' : '#1c2030'}} text={theme.toLowerCase() === 'light' ? 'dark' : 'white'}>
                           <Card.Header as="h5">
                             {order.pair} <Badge style={{backgroundColor: order.buySell == 'buy'? 'green' : 'red'}}>{order.buySell}</Badge>
-                            <p style={{fontSize: 11, fontWeight: 'bold', margin: '3px 0px'}}>{order.buySell == 'buy' && `${order.buySell.toUpperCase()} ${abbreviateNumber(order.amountA, 1)} ${order.pair.split('-')[0]} at ${order.price} ${order.pair.split('-')[1]}`}</p>
-                            <p style={{fontSize: 11, fontWeight: 'bold', margin: '3px 0px'}}>{order.buySell == 'sell' && `${order.buySell.toUpperCase()} ${abbreviateNumber(order.amountA, 2)} ${order.pair.split('-')[0]} at ${order.price} ${order.pair.split('-')[1]}`}</p>
+                            <p style={{fontSize: 11, fontWeight: 'bold', margin: '3px 0px'}}>{order.buySell == 'buy' && `${order.orderType.toUpperCase()} ${order.buySell.toUpperCase()} ${(order.filledAmount)} ${order.pair.split('-')[0]} at ${order.price} ${order.pair.split('-')[1]}`}</p>
+                            <p style={{fontSize: 11, fontWeight: 'bold', margin: '3px 0px'}}>{order.buySell == 'sell' && `${order.orderType.toUpperCase()} ${order.buySell.toUpperCase()} ${(order.filledAmount)} ${order.pair.split('-')[0]} at ${order.price} ${order.pair.split('-')[1]}`}</p>
                           </Card.Header>
                         </Card>
               })}

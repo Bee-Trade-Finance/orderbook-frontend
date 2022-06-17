@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react';
-import { Navbar, Nav, NavDropdown, Dropdown, Button } from 'react-bootstrap';
+import { useEffect } from 'react';
+import { Navbar, Nav, Dropdown, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core'
 import { connectors } from "../connectors";
-import { networkParams } from "../networks";
+// import { networkParams } from "../networks";
 import { ThemeConsumer } from '../context/ThemeContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsis, faBars } from '@fortawesome/free-solid-svg-icons'
+import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
 
 const Header = () => {
-  const { library, activate, deactivate, active, chainId, account } = useWeb3React();
+  const { activate, deactivate, active, account } = useWeb3React();
 
   useEffect(() => {
     

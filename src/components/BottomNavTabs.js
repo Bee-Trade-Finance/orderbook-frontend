@@ -1,5 +1,5 @@
 import { ThemeConsumer } from '../context/ThemeContext';
-import { FaExchangeAlt, FaRegListAlt, FaChessBoard, FaCompress, FaWallet } from 'react-icons/fa';
+import { FaExchangeAlt, FaRegListAlt, FaChessBoard, FaWallet } from 'react-icons/fa';
 import { useHistory } from 'react-router-dom';
 import '../assets/scss/module/_bottom-nav.scss'
 const BottomNavTabs = () => {

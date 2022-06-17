@@ -8,7 +8,7 @@ import { getFirestore, collection, addDoc, query, where, getDocs, doc, setDoc, o
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDf2piS9HRwNj-7hk3Jsvwb9529wlvng54",
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: "beetrade-orderbook.firebaseapp.com",
     projectId: "beetrade-orderbook",
     storageBucket: "beetrade-orderbook.appspot.com",
@@ -47,7 +47,6 @@ const fetchOrCreateUser = async (address) => {
 const sendOrder = async (order) => {
   try {
     let res = await setDoc(doc(db, `${order.pair}-${order.buySell.toUpperCase()}`, order.id), order, { merge: true });
-    console.log(res);
   } catch(error){
     console.log(error);
   }
@@ -64,7 +63,6 @@ const fetchSupportedTokens = async () => {
       // doc.data() is never undefined for query doc snapshots
       res.push(doc.data());
     });
-    console.log(res)
     return res;
   } catch(err){
     alert(err)
@@ -75,7 +73,6 @@ const fetchTokenDetails = async (symbol) => {
   try {
     const q = query(collection(db, "tokens", where("symbol", "==", symbol)));
     const querySnapshot = await getDocs(q);
-    console.log('query',querySnapshot)
     let res = [];
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots

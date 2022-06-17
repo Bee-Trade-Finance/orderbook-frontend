@@ -32,7 +32,6 @@ export async function depositAVAX(library, amount){
         
         let res = await beetradeOrderbookContract.depositAVAX(wei.toString(), options);
         const receipt = await res.wait(res);
-        console.log('rezzz', receipt);
         return ({success: true, data: {message: `Transaction Mined With ${receipt.confirmations} Confirmations, Transaction Hash: ${receipt.transactionHash}`, ...receipt}});
     } catch(error){
         if(error.data?.message) return ({error: true, data: error.data})
@@ -54,7 +53,6 @@ export async function depositToken(library, address, amount, abi){
     
         let res = await beetradeOrderbookContract.depositToken(address, wei.toString());
         const receipt = await res.wait(res);
-        console.log('rezzz', receipt);
         return ({success: true, data: {message: `Transaction Mined With ${receipt.confirmations} Confirmations, Transaction Hash: ${receipt.transactionHash}`, ...receipt}});
     } catch(error){
         if(error.data?.message) return ({error: true, data: error.data})
@@ -68,10 +66,8 @@ export async function withdrawAVAX(library, amount){
         const signer = library.getSigner();
         const beetradeOrderbookContract = new ethers.Contract(process.env.REACT_APP_CONTRACT_ADDRESS_TESTNET, BeeTradeOrderbookABI, signer);
         let wei = ethers.utils.parseEther(amount);
-        console.log(wei.toString())
         let res = await beetradeOrderbookContract.withdrawAVAX(wei.toString());
         const receipt = await res.wait(res);
-        console.log('rezzz', receipt);
         return ({success: true, data: {message: `Transaction Mined With ${receipt.confirmations} Confirmations, Transaction Hash: ${receipt.transactionHash}`, ...receipt}});
     } catch(error){
         if(error.data?.message) return ({error: true, data: error.data})
@@ -85,12 +81,9 @@ export async function withdrawToken(library, address, amount ){
         const signer = library.getSigner();
         const beetradeOrderbookContract = new ethers.Contract(process.env.REACT_APP_CONTRACT_ADDRESS_TESTNET, BeeTradeOrderbookABI, signer);
         let wei = ethers.utils.parseEther(amount);
-
-        console.log(wei.toString())
         
         let res = await beetradeOrderbookContract.withdrawToken(address, wei.toString());
         const receipt = await res.wait(res);
-        console.log('rezzz', receipt);
         return ({success: true, data: {message: `Transaction Mined With ${receipt.confirmations} Confirmations, Transaction Hash: ${receipt.transactionHash}`, ...receipt}});
     } catch(error){
         if(error.data?.message) return ({error: true, data: error.data})
@@ -107,7 +100,6 @@ export async function sendOrder(library, order ){
         let priceWei = ethers.utils.parseEther(order.price.toString());
         let res = await beetradeOrderbookContract.createOrder(amountWei.toString(), order.buySell, order.date.toString(), order.orderType, order.pair, priceWei.toString(), order.id, order.token);
         const receipt = await res.wait(res);
-        console.log('rezzz', receipt);
         return ({success: true, data: {message: `Transaction Mined With ${receipt.confirmations} Confirmations, Transaction Hash: ${receipt.transactionHash}`, ...receipt}});
     } catch(error){
         if(error.data?.message) return ({error: true, data: error.data})
@@ -121,10 +113,8 @@ export async function removeOrder(library, order ){
         const signer = library.getSigner();
         const beetradeOrderbookContract = new ethers.Contract(process.env.REACT_APP_CONTRACT_ADDRESS_TESTNET, BeeTradeOrderbookABI, signer);
         let amountWei = ethers.utils.parseEther(order.buySell === 'buy'? order.amountB.toString() : order.amountA.toString());
-        alert(order.token)
-        let res = await beetradeOrderbookContract.cancelOrder(order.pair, order.buySell, order.id, amountWei.toString(), order.token);
+        let res = await beetradeOrderbookContract.cancelOrder(order.pair, order.buySell, order.id, order.token);
         const receipt = await res.wait(res);
-        console.log('rezzz', receipt);
         return ({success: true, data: {message: `Transaction Mined With ${receipt.confirmations} Confirmations, Transaction Hash: ${receipt.transactionHash}`, ...receipt}});
     } catch(error){
         if(error.data?.message) return ({error: true, data: error.data})
@@ -148,7 +138,6 @@ export async function stakeToken(library, address, amount, abi){
     
         let res = await beetradeStakingContractBTF.deposit(wei.toString());
         const receipt = await res.wait(res);
-        console.log('rezzz', receipt);
         return ({success: true, data: {message: `Transaction Mined With ${receipt.confirmations} Confirmations, Transaction Hash: ${receipt.transactionHash}`, ...receipt}});
     } catch(error){
         if(error.data?.message) return ({error: true, data: error.data})
@@ -167,7 +156,6 @@ export async function unstakeToken(library, amount){
     
         let res = await beetradeStakingContractBTF.withdraw(wei.toString());
         const receipt = await res.wait(res);
-        console.log('rezzz', receipt);
         return ({success: true, data: {message: `Transaction Mined With ${receipt.confirmations} Confirmations, Transaction Hash: ${receipt.transactionHash}`, ...receipt}});
     } catch(error){
         if(error.data?.message) return ({error: true, data: error.data})
@@ -185,7 +173,6 @@ export async function unstakeAllTokens(library){
     
         let res = await beetradeStakingContractBTF.withdrawAll();
         const receipt = await res.wait(res);
-        console.log('rezzz', receipt);
         return ({success: true, data: {message: `Transaction Mined With ${receipt.confirmations} Confirmations, Transaction Hash: ${receipt.transactionHash}`, ...receipt}});
     } catch(error){
         if(error.data?.message) return ({error: true, data: error.data})
@@ -234,7 +221,6 @@ export async function claimRewards(library){
     
         let res = await beetradeStakingContractBTF.claimRewards();
         const receipt = await res.wait(res);
-        console.log('rezzz', receipt);
         return ({success: true, data: {message: `Transaction Mined With ${receipt.confirmations} Confirmations, Transaction Hash: ${receipt.transactionHash}`, ...receipt}});
     } catch(error){
         if(error.data?.message) return ({error: true, data: error.data})

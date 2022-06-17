@@ -1,6 +1,7 @@
 import React from 'react';
 import Layout from '../components/Layout';
 import { Switch, Route } from 'react-router-dom';
+import Home from '../pages/home';
 import Exchange from '../pages/exchange';
 import Markets from '../pages/markets';
 import Stake from '../pages/stake';
@@ -23,6 +24,9 @@ export default function index() {
     <>
       <Layout>
         <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
           <Route exact path="/trade/:pair">
             <Exchange />
           </Route>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { abbreviateNumber } from "js-abbreviation-number";
 
-export default function OrderBook({buyOrders, sellOrders, pair, autoFillOrder}) {
+export default function OrderBook({buyOrders, sellOrders, pair, autoFillOrder, pairData}) {
   return (
     <>
       <div className="order-book" style={{flex: 1}}>
@@ -29,15 +29,12 @@ export default function OrderBook({buyOrders, sellOrders, pair, autoFillOrder}) 
             <tr>
               <td>
                 <span><strong>Price</strong> </span>
-                0.020367
+                {pairData.price}
               </td>
-              <td>
-                <span><strong>USD</strong></span>
-                00.00
-              </td>
-              <td className="green">
+              <td className={Math.sign(pairData.priceChange) === 1? 'green' : 'red'}>
                 <span><strong>Change (24H)</strong></span>
-                +100.51%
+                {Math.sign(pairData.priceChange) === 1? '+' : '-'}
+                {pairData.priceChange}%
               </td>
             </tr>
           </tbody>

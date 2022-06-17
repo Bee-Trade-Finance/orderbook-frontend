@@ -3,16 +3,12 @@ import { useParams, useHistory } from 'react-router-dom';
 import { useWeb3React } from '@web3-react/core';
 import { ToastContainer, toast } from 'react-toastify';
 import HistoryOrder from '../components/HistoryOrder';
-import MarketHistory from '../components/MarketHistory';
-import MarketNews from '../components/MarketNews';
-import MarketPairs from '../components/MarketPairs';
 import MarketTrade from '../components/MarketTrade';
 import OrderBook from '../components/OrderBook';
 import TradingChart from '../components/TradingChart';
-import TradingChartDark from '../components/TradingChartDark';
 import { ThemeConsumer } from '../context/ThemeContext';
 import {  useWindowSize } from '@react-hook/window-size';
-import {fetchOrCreateUser, doc, onSnapshot, query, collection, db, where, fetchSupportedTokens} from '../firebase';
+import {fetchOrCreateUser, onSnapshot, query, collection, db, where, fetchSupportedTokens} from '../firebase';
 import Pairs from '../pairs'
 import { getTokensBalances, sendOrder, removeOrder } from '../helpers/contract';
 import displayToast from '../utils/displayToast';
@@ -21,7 +17,7 @@ import displayToast from '../utils/displayToast';
 
 const Exchange = () => {
   const { library, activate, deactivate, active, chainId, account } = useWeb3React();
-  const [price, setPrice] = useState(0.001)
+  const [price, setPrice] = useState(0)
   const [amount, setAmount] = useState(0)
   const [volume, setVolume] = useState(0)
   const [buySell, setBuySell] = useState('buy');
@@ -38,12 +34,9 @@ const Exchange = () => {
   const [tokens, setTokens] = useState([]);
   const [sellOrders, setSellOrders] = useState([]);
   const [userTrades, setUserTrades] = useState([]);
+  const [pairData, setPairData] = useState([]);
   const [width, height] = useWindowSize()
   const breakPoint = 767;
-
-  useEffect(()=> {
-    console.log('size', width, height)
-  }, [width, height])
 
   const buyOrdersSocket = () => {
     const q = query(collection(db, `${pair}-BUY`), where("pair", "==", pair));
@@ -65,23 +58,58 @@ const Exchange = () => {
       querySnapshot.forEach((doc) => {
           orders.push(doc.data());
       });
-      console.log("Current Buy Orders: ", orders);
+      console.log("Current Sell Orders: ", orders);
       let sortedOrders = orders.sort((a, b) => b.price - a.price);
       setSellOrders(sortedOrders);
     });
   }
 
-  const userTradesSocket = () => {
-    const q = query(collection(db, `${pair}-TRADES`), where("account", "==", account));
+  const tradesSocket = () => {
+    const q = query(collection(db, `${pair}-TRADES`));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const orders = [];
       querySnapshot.forEach((doc) => {
           orders.push(doc.data());
       });
-      console.log("Trade History: ", orders);
-      let sortedOrders = orders.sort((a, b) => b.date - a.date);
-      setUserTrades(sortedOrders);
+      calculatePairData(orders);
+      const usersOrders = orders.filter(order => order.account === account);
+      console.log("Trade History: ", usersOrders);
+      let sortedUserOrders = usersOrders.sort((a, b) => b.date - a.date);
+      setUserTrades(sortedUserOrders);
     });
+  }
+
+  const calculatePairData = (trades) => {
+    let returnData = {
+      totalTrades: 0,
+      totalAmountTraded: 0,
+      high: 0,
+      low: 0,
+      price: 0,
+      priceChange: 0
+    };
+    let limitDate = Date.now() - 86400000; // 24hrs in millisecs
+    let daysTrades = trades.filter(trade => trade.date >= limitDate);
+    let sortedDaysTrades = daysTrades.sort((a,b)=> b.date-a.date);
+    
+    sortedDaysTrades.forEach((trade, i) => {
+      returnData.totalAmountTraded += trade.amountA;
+      if(i===0) returnData.low = trade.price;
+      if(trade.price < returnData.low) returnData.low = trade.price;
+      if(trade.price > returnData.high) returnData.high = trade.price;
+    });
+
+    let currentPrice = sortedDaysTrades[0]?.price? sortedDaysTrades[0].price : 0;
+    let openingPrice = sortedDaysTrades[sortedDaysTrades.length-1]?.price? sortedDaysTrades[sortedDaysTrades.length-1].price : 0;
+
+    let priceChange = ((currentPrice-openingPrice) / openingPrice) * 100;
+
+    returnData.price = currentPrice;
+    returnData.priceChange = priceChange;
+    returnData.totalTrades = sortedDaysTrades.length;
+
+    setPairData(returnData);
+    if(price <= 0) setPrice(returnData.price);
   }
 
   
@@ -127,14 +155,12 @@ const Exchange = () => {
   async function fetchUserData(){
     let user = await fetchOrCreateUser(account);
     if(user){
-      console.log(user)
       setUserData(user);
     }
   }
 
   async function fetchTokensList(){
     let data = await fetchSupportedTokens();
-    console.log('dat', data);
     setTokens(data);
   }
 
@@ -151,7 +177,7 @@ const Exchange = () => {
   useEffect(() => {
     if(account){
       fetchUserData();
-      userTradesSocket();
+      tradesSocket();
     }
   }, [account])
 
@@ -224,7 +250,7 @@ const Exchange = () => {
           <div className="col-sm-12 col-md-6">
             <ThemeConsumer>
               {({data}) => {
-                return <TradingChart theme={data.theme} width={width} pair={activePair} />
+                return <TradingChart theme={data.theme} width={width} pair={activePair} pairData={pairData} />
               }}
             </ThemeConsumer>
             {width < breakPoint &&
@@ -245,7 +271,15 @@ const Exchange = () => {
                   
                   />
 
-                  <OrderBook buyOrders={buyOrders} sellOrders={sellOrders} pair={pair} autoFillOrder={autoFillOrder} width={width} breakPoint={breakPoint} />
+                  <OrderBook 
+                    buyOrders={buyOrders} 
+                    sellOrders={sellOrders} 
+                    pair={pair} 
+                    autoFillOrder={autoFillOrder} 
+                    width={width} 
+                    breakPoint={breakPoint} 
+                    pairData={pairData}
+                  />
               </div>
             
             }
@@ -256,8 +290,15 @@ const Exchange = () => {
             </ThemeConsumer>
           </div>
           <div className="col-md-3 mb-5">
-            {width > breakPoint && <OrderBook buyOrders={buyOrders} sellOrders={sellOrders} pair={pair} autoFillOrder={autoFillOrder} />}
-            {/* <MarketHistory pair={pair} /> */}
+            {
+              width > breakPoint && 
+              <OrderBook 
+                buyOrders={buyOrders} 
+                sellOrders={sellOrders} 
+                pair={pair} 
+                autoFillOrder={autoFillOrder} 
+                pairData={pairData}
+              />}
           </div>
         </div>
       </div>

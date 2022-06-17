@@ -18,6 +18,7 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
     }
   }, [sliderState])
 
+
   const isNumber = (val) => {
     return(typeof(val) === 'number');
   }
