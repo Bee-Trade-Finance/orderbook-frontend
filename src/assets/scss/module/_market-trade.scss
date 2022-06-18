@@ -76,7 +76,8 @@
 }
 
 .market-trade button.buy,
-.market-trade button.sell {
+.market-trade button.sell,
+.market-trade button.swap {
   background: #26de81;
   color: #fff;
   text-transform: uppercase;
@@ -88,6 +89,11 @@
 .market-trade button.sell {
   background: #ff231f;
   box-shadow: 0px 0px 15px 0px #ff231fad;
+}
+
+.market-trade button.swap {
+  background: #fab327;
+  box-shadow: 0px 0px 15px 0px #fab327;
 }
 .market-trade p {
   margin: 5px 0;

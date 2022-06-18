@@ -153,9 +153,9 @@ const Exchange = () => {
   }, [tokens, account])
 
   async function fetchUserData(){
-    let user = await fetchOrCreateUser(account);
-    if(user){
-      setUserData(user);
+    let {address} = await fetchOrCreateUser(account);
+    if(address){
+      setUserData({...user, address});
     }
   }
 
@@ -242,6 +242,7 @@ const Exchange = () => {
                 setBuySell={setBuySell}
                 createOrder={createOrder}
                 createOrderLoading={createOrderLoading}
+                currentPrice={pairData.price}
                 
                 />
               {/* <MarketPairs /> */}
@@ -268,6 +269,7 @@ const Exchange = () => {
                   setBuySell={setBuySell}
                   createOrder={createOrder}
                   createOrderLoading={createOrderLoading}
+                  currentPrice={pairData.price}
                   
                   />
 
