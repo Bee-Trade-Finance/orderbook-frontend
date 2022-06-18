@@ -27,7 +27,11 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
   }, [sliderState])
 
   useEffect(() => {
-    setAmountGet(amountGive * swapPrice)
+    if(activePair[0] === tokenGive.symbol){
+      setAmountGet(amountGive * swapPrice);
+    } else {
+      setAmountGet(amountGive / swapPrice);
+    }
   }, [swapPrice, tokenGive, tokenGet, amountGive])
 
 
@@ -273,7 +277,7 @@ export default function MarketTrade({activePair, user, price, setPrice, amount, 
                         </div>
                       </div>
                       <p className='p-0 m-0'>Balance: {user[tokenGet.symbol].available}</p>
-                      <p>Price {swapPrice} {tokenGet.symbol} per {tokenGive.symbol}</p>
+                      <p>Price {activePair[0] === tokenGive.symbol? swapPrice : 1/swapPrice} {tokenGet.symbol} per {tokenGive.symbol}</p>
                       <p className='text-danger'>Note Price might change for very volatile markets</p>
                     </>
                   <div>
