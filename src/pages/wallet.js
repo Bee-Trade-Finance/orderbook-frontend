@@ -17,7 +17,6 @@ export default function Wallet() {
   const [loading, setLoading] = useState({});
   const [inputs, setInputs] = useState({});
   const { library, activate, deactivate, active, chainId, account } = useWeb3React();
-  const { NODE_ENV, REACT_APP_CONTRACT_ADDRESS_TESTNET, REACT_APP_CONTRACT_ADDRESS } = process.env;
 
   async function fetchTokensList(){
     let data = await fetchSupportedTokens();
@@ -59,7 +58,7 @@ export default function Wallet() {
     // if(library){
     //   // let res = await library.getBalance("0xa9a02aa338DdbD7ffd952799bA006c45CC651bF3");
       // const signer = library.getSigner();
-    //   const beetradeOrderbookContract = new ethers.Contract(process.env.REACT_APP_CONTRACT_ADDRESS_TESTNET, BeeTradeOrderbookABI, signer);
+    //   const beetradeOrderbookContract = new ethers.Contract(process.env.REACT_APP_ORDERBOOK_CONTRACT_ADDRESS, BeeTradeOrderbookABI, signer);
     //   let res = await beetradeOrderbookContract.getAvailableAVAXBalance();
     //   console.log("res", ethers.utils.formatEther(res))
       // const tx = signer.sendTransaction({
