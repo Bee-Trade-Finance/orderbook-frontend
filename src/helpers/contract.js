@@ -50,8 +50,14 @@ export async function depositToken(library, address, amount, abi){
         const resp_receipt = await resp.wait(resp);
 
         const beetradeOrderbookContract = new ethers.Contract(process.env.REACT_APP_ORDERBOOK_CONTRACT_ADDRESS, BeeTradeOrderbookABI, signer);
+        let amountWei = 0;
+        if(address == "0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7"){
+            amountWei = amount * 1e6;
+        } else {
+            amountWei = wei.toString()
+        }
     
-        let res = await beetradeOrderbookContract.depositToken(address, wei.toString());
+        let res = await beetradeOrderbookContract.depositToken(address, amountWei);
         const receipt = await res.wait(res);
         return ({success: true, data: {message: `Transaction Mined With ${receipt.confirmations} Confirmations, Transaction Hash: ${receipt.transactionHash}`, ...receipt}});
     } catch(error){
