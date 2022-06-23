@@ -235,7 +235,7 @@ export async function getAPY(library){
     const beetradeStakingContractBTF = new ethers.Contract(process.env.REACT_APP_BEETRADE_STAKING_BTF_CONTRACT, BeeTradeStakingBTFABI, signer);
 
     let res = await beetradeStakingContractBTF.fixedAPY();
-    return res.toString();
+    return 12;
 }
 
 export async function getEndsIn(library){
