@@ -9,11 +9,11 @@ export default function Layout({ children }) {
   const breakPoint = 767;
 
   return (
-    <>
+    <div style={{paddingBottom: 50}}>
       <Header />
       {children}
       {width < breakPoint && <BottomNavTabs />}
 
-    </>
+    </div>
   );
 }

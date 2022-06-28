@@ -51,7 +51,7 @@ export async function depositToken(library, address, amount, abi){
 
         const beetradeOrderbookContract = new ethers.Contract(process.env.REACT_APP_ORDERBOOK_CONTRACT_ADDRESS, BeeTradeOrderbookABI, signer);
     
-        let res = await beetradeOrderbookContract.depositToken(address, amount);
+        let res = await beetradeOrderbookContract.depositToken(address, wei.toString());
         const receipt = await res.wait(res);
         return ({success: true, data: {message: `Transaction Mined With ${receipt.confirmations} Confirmations, Transaction Hash: ${receipt.transactionHash}`, ...receipt}});
     } catch(error){
@@ -82,7 +82,7 @@ export async function withdrawToken(library, address, amount ){
         const beetradeOrderbookContract = new ethers.Contract(process.env.REACT_APP_ORDERBOOK_CONTRACT_ADDRESS, BeeTradeOrderbookABI, signer);
         let wei = ethers.utils.parseEther(amount);
         
-        let res = await beetradeOrderbookContract.withdrawToken(address, amount);
+        let res = await beetradeOrderbookContract.withdrawToken(address, wei.toString());
         const receipt = await res.wait(res);
         return ({success: true, data: {message: `Transaction Mined With ${receipt.confirmations} Confirmations, Transaction Hash: ${receipt.transactionHash}`, ...receipt}});
     } catch(error){
