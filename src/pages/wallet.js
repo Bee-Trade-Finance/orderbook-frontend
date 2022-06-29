@@ -109,9 +109,9 @@ export default function Wallet() {
                             </div>
                           </div>
                           <div>
-                            <h3>{balances[token.address]?.available? balances[token.address]?.available : '---'}</h3>
+                            <h3>{balances[token.address]?.available? (balances[token.address]?.available*1).toFixed(4) : '---'}</h3>
                             <p className="text-right">
-                              Locked: <strong>{balances[token.address]?.locked? balances[token.address]?.locked : '---'}</strong>
+                              Locked: <strong>{balances[token.address]?.locked? (balances[token.address]?.locked*1).toFixed(4) : '---'}</strong>
                             </p>
                           </div>
                         </div>
