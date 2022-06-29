@@ -45,7 +45,7 @@ export default function StakingList() {
     setAPY(_APY);
 
     let _totalStaked = await getTotalStaked(library);
-    setTotalStaked(_totalStaked);
+    setTotalStaked(_totalStaked*1);
 
     let _userStaked = await getAmountStakedUser(library, account);
     setUserStaked(_userStaked);
@@ -89,7 +89,7 @@ export default function StakingList() {
                                 </td>
                                 <td>{endsIn} Days</td>
                                 <td className="green">{APY}%</td>
-                                <td>{totalStaked}</td>
+                                <td>{totalStaked.toFixed(2)}</td>
                               </tr>
                             )
                           })}
