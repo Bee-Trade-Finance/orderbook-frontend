@@ -138,15 +138,9 @@ const Header = () => {
                         </a>
                       </li>
                       <li className="nav-item">
-                        <Link to="#" className="nav-link">
+                        <Link to="/wallet" className="nav-link">
                           <i className="icon ion-md-wallet"></i>
                           <span>My Wallet</span>
-                        </Link>
-                      </li>
-                      <li className="nav-item">
-                        <Link to="#" className="nav-link">
-                          <i className="icon ion-md-settings"></i>
-                          <span>Settings</span>
                         </Link>
                       </li>
                       <li className="nav-item" onClick={disconnectWallet}>

@@ -104,12 +104,12 @@ const Exchange = () => {
 
     let priceChange = ((currentPrice-openingPrice) / openingPrice) * 100;
 
-    returnData.price = currentPrice;
-    returnData.priceChange = priceChange;
+    returnData.price = currentPrice.toFixed(4);
+    returnData.priceChange = priceChange.toFixed(2);
     returnData.totalTrades = sortedDaysTrades.length;
 
     setPairData(returnData);
-    if(price <= 0) setPrice(returnData.price);
+    if(price <= 0) setPrice(returnData.price.toFixed(4));
   }
 
   

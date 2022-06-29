@@ -204,12 +204,12 @@ const TradingChart = memo(({theme, width, pair, pairData}) => {
       </div>
       <div className='col-4'>
         <p className="p-0 m-0" style={{color: theme==='dark'? 'white' : 'black'}} >Price</p>
-        <p className="p-0 m-0" style={{color: theme==='dark'? 'white' : 'black'}}>{pairData.price.toFixed(4)}</p>
+        <p className="p-0 m-0" style={{color: theme==='dark'? 'white' : 'black'}}>{pairData.price}</p>
       </div>
       <div className='col-4'>
         <p className="p-0 m-0" style={{color: theme==='dark'? 'white' : 'black'}}>Change 24H</p>
         <p className={Math.sign(pairData.priceChange) === 1? 'green p-0 m-0' : 'red p-0 m-0'}>{Math.sign(pairData.priceChange) === 1? '+' : '-'}
-                {pairData.priceChange.toFixed(2)}%</p>
+                {pairData.priceChange}%</p>
       </div>
       
     </div>

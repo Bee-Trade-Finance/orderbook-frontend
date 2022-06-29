@@ -29,12 +29,12 @@ export default function OrderBook({buyOrders, sellOrders, pair, autoFillOrder, p
             <tr>
               <td>
                 <span><strong>Price</strong> </span>
-                {pairData.price.toFixed(4)}
+                {pairData.price}
               </td>
               <td className={Math.sign(pairData.priceChange) === 1? 'green' : 'red'}>
                 <span><strong>Change (24H)</strong></span>
                 {Math.sign(pairData.priceChange) === 1? '+' : '-'}
-                {pairData.priceChange.toFixed(2)}%
+                {pairData.priceChange}%
               </td>
             </tr>
           </tbody>

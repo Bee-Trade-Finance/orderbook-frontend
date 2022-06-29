@@ -8,7 +8,7 @@ export async function getTokenBalance(library, token){
     const beetradeOrderbookContract = new ethers.Contract(process.env.REACT_APP_ORDERBOOK_CONTRACT_ADDRESS, BeeTradeOrderbookABI, signer);
     let res = await beetradeOrderbookContract.getAvailableTokenBalance(token);
     let res2 = await beetradeOrderbookContract.getLockedTokenBalance(token);
-    return {available: ethers.utils.formatEther(res), locked: ethers.utils.formatEther(res2)};
+    return {available: (ethers.utils.formatEther(res)*1).toFixed(4), locked: (ethers.utils.formatEther(res2)*1).toFixed(4)};
 }
 
 export async function getTokensBalances(library, tokens){
@@ -188,7 +188,7 @@ export async function getAmountStakedUser(library, address){
     const beetradeStakingContractBTF = new ethers.Contract(process.env.REACT_APP_BEETRADE_STAKING_BTF_CONTRACT, BeeTradeStakingBTFABI, signer);
 
     let res = await beetradeStakingContractBTF.amountStaked(address);
-    return ethers.utils.formatEther(res);
+    return (ethers.utils.formatEther(res)*1).toFixed(2);
     
 }
 
@@ -200,7 +200,7 @@ export async function getTotalStaked(library){
     const beetradeStakingContractBTF = new ethers.Contract(process.env.REACT_APP_BEETRADE_STAKING_BTF_CONTRACT, BeeTradeStakingBTFABI, signer);
 
     let res = await beetradeStakingContractBTF.totalDeposited();
-    return ethers.utils.formatEther(res);
+    return (ethers.utils.formatEther(res)*1).toFixed(2);
 }
 
 export async function getPendingRewards(library, address){
@@ -209,7 +209,7 @@ export async function getPendingRewards(library, address){
     const beetradeStakingContractBTF = new ethers.Contract(process.env.REACT_APP_BEETRADE_STAKING_BTF_CONTRACT, BeeTradeStakingBTFABI, signer);
 
     let res = await beetradeStakingContractBTF.rewardOf(address);
-    return ethers.utils.formatEther(res);
+    return (ethers.utils.formatEther(res)*1).toFixed(4);
 }
 
 

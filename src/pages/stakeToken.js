@@ -114,11 +114,11 @@ export default function StakeToken() {
                                                     </div>
                                                     <div className='col-4'>
                                                         <p className='text-muted'>Total Staked ({tokenDetails.symbol})</p>
-                                                        <h5>{(totalStaked*1).toFixed(2)}</h5>
+                                                        <h5>{totalStaked}</h5>
                                                     </div>
                                                     <div className='col-4'>
-                                                        <p className='text-muted'>Ends In</p>
-                                                        <h5>{endsIn} Days</h5>
+                                                        <p className='text-muted'>Lock Period</p>
+                                                        <h5>{365} Days</h5>
                                                     </div>
                                                 </div>
                                                 <Card.Footer style={{backgroundColor: '#ccc', borderRadius: "8px"}}>
@@ -126,11 +126,11 @@ export default function StakeToken() {
                                                     <div className='row'>
                                                         <div className='col-6'>
                                                             <p className='text-muted'>Staked</p>
-                                                            <h5>{(userStaked*1).toFixed(2)} {tokenDetails.symbol}</h5>
+                                                            <h5>{userStaked} {tokenDetails.symbol}</h5>
                                                         </div>
                                                         <div className='col-6'>
                                                             <p className='text-muted'>Pending Rewards</p>
-                                                            <h5>{(pendingRewards*1).toFixed(4)} {tokenDetails.symbol}</h5>
+                                                            <h5>{pendingRewards} {tokenDetails.symbol}</h5>
                                                         </div>
                                                     </div>
                                                     <div className="d-block gap-2 mt-5">
