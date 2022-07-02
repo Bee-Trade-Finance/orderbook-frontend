@@ -109,7 +109,7 @@ const Exchange = () => {
     returnData.totalTrades = sortedDaysTrades.length;
 
     setPairData(returnData);
-    if(price <= 0) setPrice(returnData.price.toFixed(4));
+    if(price <= 0) setPrice(returnData.price);
   }
 
   
@@ -141,7 +141,6 @@ const Exchange = () => {
   }, [volume])
 
   useEffect(() => {
-    setPrice(0.001);
     setAmount(0);
     setVolume(0);
   }, [buySell])
