@@ -21,7 +21,8 @@ import {
     getPendingRewards, 
     claimRewards,
     getAPY,
-    getEndsIn
+    getEndsIn,
+    getUsersEndsIn
 } from '../helpers/contract';
 
 export default function StakeToken() {
@@ -31,6 +32,7 @@ export default function StakeToken() {
     const [userStaked, setUserStaked] = useState(0);
     const [pendingRewards, setPendingRewards] = useState(0);
     const [endsIn, setEndsIn] = useState(0);
+    const [daysLeft, setDaysLeft] = useState(0);
     const [inputVal, setInputVal] = useState(0)
     const { library, activate, deactivate, active, chainId, account } = useWeb3React();
     let { token } = useParams();
@@ -50,6 +52,9 @@ export default function StakeToken() {
 
         let _endsIn = await getEndsIn(library);
         setEndsIn(_endsIn);
+
+        let _usersEndsIn = await getUsersEndsIn(library, account);
+        setDaysLeft(_usersEndsIn);
     }
 
     async function _claimRewards(){
@@ -124,15 +129,20 @@ export default function StakeToken() {
                                                 <Card.Footer style={{backgroundColor: '#ccc', borderRadius: "8px"}}>
                                                     <h5>Your Staking Details</h5>
                                                     <div className='row'>
-                                                        <div className='col-6'>
+                                                        <div className='col-md-4 col-sm-6'>
                                                             <p className='text-muted'>Staked</p>
                                                             <h5>{userStaked} {tokenDetails.symbol}</h5>
                                                         </div>
-                                                        <div className='col-6'>
+                                                        <div className='col-md-4 col-sm-6'>
                                                             <p className='text-muted'>Pending Rewards</p>
                                                             <h5>{pendingRewards} {tokenDetails.symbol}</h5>
                                                         </div>
+                                                        <div className='col-md-4 col-sm-6'>
+                                                            <p className='text-muted'>Days Left</p>
+                                                            <h5>{daysLeft} Days</h5>
+                                                        </div>
                                                     </div>
+
                                                     <div className="d-block gap-2 mt-5">
                                                         <Button onClick={() => _claimRewards()} className='mt-2' variant="secondary" size="lg" style={{width: '100%'}}>
                                                             Claim Rewards

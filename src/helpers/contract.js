@@ -255,3 +255,22 @@ export async function getEndsIn(library){
 
     return (days)
 }
+
+export async function getUsersEndsIn(library, address){
+    const signer = library.getSigner();
+
+    const beetradeStakingContractBTF = new ethers.Contract(process.env.REACT_APP_BEETRADE_STAKING_BTF_CONTRACT, BeeTradeStakingBTFABI, signer);
+
+    let res = await beetradeStakingContractBTF._userStakeStartTime(address);
+    
+    let pastDate = res.toString() * 1000;
+
+    if(pastDate == 0) return 0;
+    let nowDate = new Date().getTime();
+
+    let milSecs = nowDate - pastDate;
+
+    let days = Math.round((milSecs / (1000 * 3600 * 24)));
+
+    return (365-days)
+}
