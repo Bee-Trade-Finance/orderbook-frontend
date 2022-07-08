@@ -19,7 +19,7 @@ export default function OrderBook({buyOrders, sellOrders, pair, autoFillOrder, p
                 <tr className="red-bg" onClick={(e) => autoFillOrder(order.price, order.amountA, order.buySell)}>
                   <div className='sell-fill' style={{width: `${order.filledAmount/order.amountA * 100}%`}}></div>
                   <td className="red">{order.price.toFixed(4)}</td>
-                  <td>{abbreviateNumber(order.amountA, 1)}</td>
+                  <td>{order.amountA > 1? abbreviateNumber(order.amountA, 1) : order.amountA}</td>
                 </tr>
               )
             })}
@@ -46,7 +46,7 @@ export default function OrderBook({buyOrders, sellOrders, pair, autoFillOrder, p
                 <tr className="green-bg" onClick={(e) => autoFillOrder(order.price, order.volume, order.buySell)}>
                   <div className='buy-fill' style={{width: `${order.filledAmount/order.amountA * 100}%`}}></div>
                   <td className="green">{order.price.toFixed(4)}</td>
-                  <td>{abbreviateNumber(order.amountA, 1) }</td>
+                  <td>{order.amountA > 1? abbreviateNumber(order.amountA, 1) : order.amountA}</td>
                 </tr>
               )
             })}
